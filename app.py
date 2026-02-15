@@ -47,3 +47,16 @@ with st.sidebar:
                     st.subheader(':red[Input address not valid!]')
             else:
                 st.subheader(':red[Input address not valid!]')
+    elif bike_method == 'Return':
+        st.subheader('Where are you located?')
+        input_street = st.text_input('Street', "")
+        input_city = st.text_input('City', 'Toronto')
+        input_country = st.text_input('Country', 'Canada')
+        findmeabike = st.button('Find me a dock!', type = 'primary') #gives a button to click
+        if findmeabike:
+            if input_street != "":
+                iamhere_return = geocode(input_street+ " " + input_city + " " + input_country) #geocode the address
+                if iamhere_return == '':
+                    st.subheader(':red[Input address not valid!]')
+            else:
+                st.subheader(':red[Input address not valid!]')
