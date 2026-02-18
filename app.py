@@ -1,5 +1,7 @@
 from helpers import *
 import streamlit as st
+import folium # for map visualization
+from streamlit_folium import folium_static # to display folium maps in streamlit + package
 
 # Example URL to fetch bike share data (replace with the actual URL from resource_urls list)
 station_url = 'https://tor.publicbikesystem.net/ube/gbfs/v1/en/station_status.json'  # Replace with the actual URL from resource_urls
@@ -60,3 +62,35 @@ with st.sidebar:
                     st.subheader(':red[Input address not valid!]')
             else:
                 st.subheader(':red[Input address not valid!]')
+
+# initial map visualization
+# Create a folium map centered around Toronto
+center = [43.651070, -79.347015] # Toronto's latitude and longitude
+m = folium.Map(location=center, zoom_start=13, tiles='cartodbpositron') # Create a map with a grey background
+
+# Add circle markers to the map for each station
+for _, row in data.iterrows():
+    marker_color = get_marker_color(row['num_bikes_available'])
+    folium.CircleMarker(
+        location=[row['lat'], row['lon']],
+        radius=2,
+        color=marker_color,
+        fill=True,
+        fill_color=marker_color,
+        fill_opacity=0.7,
+        popup=folium.Popup(f"Station ID: {row['station_id']}<br>"
+                           f"Total Bikes Available: {row['num_bikes_available']}<br>"
+                           f"Mechanical Bike Available: {row['mechanical']}<br>"
+                           f"E-Bikes Available: {row['ebike']}", max_width=300)
+    ).add_to(m)
+
+
+# Display the map in Streamlit
+folium_static(m)
+
+if findmeabike:
+    
+
+
+
+if findmeadock:
